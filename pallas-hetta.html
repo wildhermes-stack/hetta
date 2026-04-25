@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WildHermes – Tunturien Valloitus · Pallas-Hetta</title>
+<link href="https://fonts.googleapis.com/css2?family=MonteCarlo&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Josefin+Sans:wght@200;300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#050505;--gold:#D4AF37;--gold-lt:#f0d060;--gold-dk:#8a6a10;
+  --white:#F5F5F5;--bone:#ede8dc;--smoke:#1a1a1a;--mist:rgba(212,175,55,0.1);
+  --lapland:#0d1520;--lapland2:#111e2a;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--white);font-family:'Cormorant Garamond',serif;overflow-x:hidden}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:.9rem 3rem;background:rgba(5,5,5,0.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(212,175,55,0.12)}
+.nav-logo{font-family:'MonteCarlo',cursive;font-size:1.8rem;color:var(--gold);text-decoration:none}
+.nav-back{font-family:'Josefin Sans',sans-serif;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(245,245,245,.55);text-decoration:none;transition:color .3s}
+.nav-back:hover{color:var(--gold)}
+.nav-book{font-family:'Josefin Sans',sans-serif;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;padding:.55rem 1.3rem;background:var(--gold);color:var(--black);text-decoration:none;transition:all .3s}
+.nav-book:hover{background:var(--gold-lt)}
+
+/* HERO */
+.trip-hero{position:relative;min-height:90vh;display:flex;align-items:flex-end;overflow:hidden;padding:0 0 4rem}
+.hero-bg{position:absolute;inset:0;background:
+  linear-gradient(to bottom,rgba(5,5,5,.2) 0%,rgba(5,5,5,.1) 30%,rgba(5,5,5,.7) 75%,rgba(5,5,5,1) 100%),
+  linear-gradient(135deg,var(--lapland) 0%,var(--lapland2) 40%,#080e18 100%)}
+/* SVG mountain scene */
+.hero-mountains{position:absolute;bottom:0;left:0;right:0;height:60%}
+/* Stars */
+.hero-stars{position:absolute;inset:0;overflow:hidden}
+.star{position:absolute;background:white;border-radius:50%;animation:tw var(--d) infinite alternate}
+@keyframes tw{from{opacity:.1}to{opacity:.8}}
+/* Snow */
+.snowflake{position:absolute;top:-10px;color:rgba(255,255,255,.7);font-size:var(--s);animation:sf var(--f) linear infinite;animation-delay:var(--dl);pointer-events:none}
+@keyframes sf{to{transform:translateY(100vh) rotate(360deg)}}
+
+.hero-content{position:relative;z-index:2;padding:0 3rem;max-width:900px}
+.hero-eyebrow{font-family:'Josefin Sans',sans-serif;font-size:.68rem;letter-spacing:.45em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;display:block;animation:fadeUp 1s .3s both}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,7vw,5.5rem);font-weight:700;line-height:1;color:var(--white);margin-bottom:.5rem;animation:fadeUp 1s .5s both}
+.hero-title em{font-style:italic;color:var(--gold)}
+.hero-subtitle{font-family:'MonteCarlo',cursive;font-size:clamp(1.5rem,3vw,2.5rem);color:rgba(212,175,55,.7);margin-bottom:2rem;animation:fadeUp 1s .7s both}
+.hero-stats{display:flex;gap:2.5rem;flex-wrap:wrap;animation:fadeUp 1s .9s both}
+.stat{border-left:1px solid rgba(212,175,55,.3);padding-left:1rem}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;color:var(--gold);line-height:1}
+.stat-label{font-family:'Josefin Sans',sans-serif;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(245,245,245,.45);margin-top:.2rem}
+@keyframes fadeUp{from{opacity:0;transform:translateY(25px)}to{opacity:1;transform:translateY(0)}}
+
+/* PRICING HERO BAR */
+.price-bar{background:linear-gradient(90deg,rgba(212,175,55,.08),rgba(212,175,55,.15),rgba(212,175,55,.08));border-top:1px solid rgba(212,175,55,.2);border-bottom:1px solid rgba(212,175,55,.2);padding:2rem 3rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.5rem}
+.price-options{display:flex;gap:2rem;flex-wrap:wrap}
+.price-opt{text-align:center}
+.price-opt-label{font-family:'Josefin Sans',sans-serif;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,175,55,.6);margin-bottom:.3rem}
+.price-opt-val{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;color:var(--gold)}
+.price-opt-note{font-size:.8rem;color:rgba(245,245,245,.4);font-style:italic}
+.price-opt.featured .price-opt-val{font-size:2.4rem}
+.price-opt.featured .price-opt-label{color:var(--gold)}
+.book-now-btn{font-family:'Josefin Sans',sans-serif;font-size:.75rem;letter-spacing:.25em;text-transform:uppercase;padding:1rem 2.5rem;background:var(--gold);color:var(--black);text-decoration:none;transition:all .3s;border:none;cursor:pointer;white-space:nowrap}
+.book-now-btn:hover{background:var(--gold-lt);transform:translateY(-2px);box-shadow:0 8px 25px rgba(212,175,55,.3)}
+
+/* SECTIONS */
+.section{padding:5rem 3rem;max-width:1100px;margin:0 auto}
+.section-eyebrow{font-family:'Josefin Sans',sans-serif;font-size:.68rem;letter-spacing:.45em;text-transform:uppercase;color:var(--gold);margin-bottom:.8rem;display:block}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:300;color:var(--white);margin-bottom:2rem;line-height:1.2}
+.section-title em{font-style:italic;color:var(--gold)}
+
+/* DAY TIMELINE */
+.day-timeline{display:flex;flex-direction:column;gap:0}
+.day-item{display:grid;grid-template-columns:80px 1fr;gap:0;position:relative}
+.day-item::before{content:'';position:absolute;left:39px;top:28px;bottom:-1px;width:1px;background:rgba(212,175,55,.2)}
+.day-item:last-child::before{display:none}
+.day-num-wrap{display:flex;flex-direction:column;align-items:center;padding-top:1rem}
+.day-dot{width:16px;height:16px;border:2px solid var(--gold);background:var(--black);border-radius:50%;flex-shrink:0;position:relative;z-index:1}
+.day-dot.special{background:var(--gold)}
+.day-num{font-family:'Josefin Sans',sans-serif;font-size:.58rem;letter-spacing:.15em;color:rgba(212,175,55,.5);margin-top:.4rem;text-transform:uppercase}
+.day-content{padding:1rem 0 2.5rem 1.5rem;border-bottom:1px solid rgba(212,175,55,.06)}
+.day-item:last-child .day-content{border-bottom:none}
+.day-header{display:flex;align-items:center;gap:1rem;margin-bottom:.8rem;flex-wrap:wrap}
+.day-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:var(--white)}
+.day-badge{font-family:'Josefin Sans',sans-serif;font-size:.58rem;letter-spacing:.15em;padding:.25rem .65rem;border:1px solid rgba(212,175,55,.3);color:var(--gold);text-transform:uppercase}
+.day-badge.sauna{border-color:rgba(192,96,74,.5);color:#c0604a}
+.day-badge.huippu{border-color:rgba(100,180,100,.4);color:#80c880}
+.day-meta{display:flex;gap:1.5rem;flex-wrap:wrap;margin-bottom:.8rem}
+.day-meta-item{font-family:'Josefin Sans',sans-serif;font-size:.65rem;letter-spacing:.1em;color:rgba(245,245,245,.45)}
+.day-meta-item strong{color:rgba(212,175,55,.7);font-weight:400}
+.day-desc{font-size:.95rem;color:rgba(245,245,245,.65);line-height:1.75}
+.day-highlights{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.8rem}
+.highlight{font-size:.82rem;color:rgba(245,245,245,.6);padding:.2rem 0}
+.highlight::before{content:'→ ';color:var(--gold)}
+
+/* ROUTE SUMMARY TABLE */
+.route-table{width:100%;border-collapse:collapse;margin-top:1.5rem}
+.route-table th{font-family:'Josefin Sans',sans-serif;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,175,55,.7);padding:.8rem 1rem;text-align:left;border-bottom:1px solid rgba(212,175,55,.2);background:rgba(212,175,55,.04)}
+.route-table td{padding:.8rem 1rem;font-size:.9rem;color:rgba(245,245,245,.7);border-bottom:1px solid rgba(212,175,55,.06)}
+.route-table tr:hover td{background:rgba(212,175,55,.03)}
+.route-table .sauna-cell{color:#c0604a}
+.route-table .total-row td{font-weight:600;color:var(--gold);border-top:1px solid rgba(212,175,55,.3);border-bottom:none}
+
+/* DATES */
+.dates-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-top:1.5rem}
+.date-card{background:rgba(212,175,55,.05);border:1px solid rgba(212,175,55,.15);padding:1.5rem;transition:all .3s;cursor:pointer;position:relative}
+.date-card:hover{border-color:var(--gold);background:rgba(212,175,55,.08)}
+.date-card.early{border-color:rgba(100,200,100,.3)}
+.date-label{font-family:'Josefin Sans',sans-serif;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(212,175,55,.6);margin-bottom:.5rem}
+.date-dates{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;color:var(--white);margin-bottom:.3rem}
+.date-status{font-size:.8rem;font-style:italic}
+.date-status.open{color:rgba(100,200,100,.8)}
+.date-discount{position:absolute;top:.8rem;right:.8rem;font-family:'Josefin Sans',sans-serif;font-size:.58rem;letter-spacing:.1em;padding:.2rem .5rem;background:rgba(100,200,100,.15);border:1px solid rgba(100,200,100,.3);color:rgba(100,200,100,.9)}
+
+/* PRICING */
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:rgba(212,175,55,.1);margin-top:1.5rem}
+.pricing-card{background:var(--black);padding:2rem 1.5rem;text-align:center}
+.pricing-card.main{background:rgba(212,175,55,.05)}
+.pricing-name{font-family:'Josefin Sans',sans-serif;font-size:.65rem;letter-spacing:.25em;text-transform:uppercase;color:rgba(212,175,55,.6);margin-bottom:.8rem}
+.pricing-price{font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:700;color:var(--gold);line-height:1;margin-bottom:.3rem}
+.pricing-note{font-size:.82rem;color:rgba(245,245,245,.4);font-style:italic;margin-bottom:1rem}
+.pricing-when{font-family:'Josefin Sans',sans-serif;font-size:.6rem;letter-spacing:.1em;color:rgba(245,245,245,.3)}
+
+/* CAMPAIGNS */
+.campaign-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.5rem}
+.campaign-card{background:rgba(212,175,55,.05);border:1px solid rgba(212,175,55,.2);padding:1.5rem}
+.campaign-icon{font-size:2rem;margin-bottom:.8rem;display:block}
+.campaign-title{font-family:'Josefin Sans',sans-serif;font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem}
+.campaign-desc{font-size:.92rem;color:rgba(245,245,245,.65);line-height:1.6}
+.campaign-discount{font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--gold);font-weight:700;margin-top:.5rem}
+
+/* INCLUDES */
+.includes-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:1.5rem}
+.include-list,.exclude-list{list-style:none}
+.include-list li,.exclude-list li{padding:.5rem 0;font-size:.95rem;color:rgba(245,245,245,.7);border-bottom:1px solid rgba(212,175,55,.06);display:flex;align-items:baseline;gap:.8rem}
+.include-list li::before{content:'✓';color:var(--gold);font-size:.8rem;flex-shrink:0}
+.exclude-list li::before{content:'–';color:rgba(245,245,245,.3);flex-shrink:0}
+.include-title,.exclude-title{font-family:'Josefin Sans',sans-serif;font-size:.65rem;letter-spacing:.25em;text-transform:uppercase;margin-bottom:1rem}
+.include-title{color:var(--gold)}
+.exclude-title{color:rgba(245,245,245,.35)}
+
+/* SAFETY */
+.safety-box{background:rgba(30,20,10,.8);border:1px solid rgba(212,175,55,.2);border-left:3px solid var(--gold);padding:2rem;margin-top:1.5rem}
+.safety-title{font-family:'Josefin Sans',sans-serif;font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:1.2rem}
+.safety-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem}
+.safety-item{display:flex;gap:.8rem;align-items:flex-start}
+.safety-icon{font-size:1.2rem;flex-shrink:0;margin-top:.1rem}
+.safety-text{font-size:.9rem;color:rgba(245,245,245,.65);line-height:1.6}
+.safety-text strong{color:var(--white);display:block;font-family:'Josefin Sans',sans-serif;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.3rem}
+
+/* REQUIREMENTS */
+.req-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:1.5rem}
+.req-card{background:rgba(212,175,55,.04);border:1px solid rgba(212,175,55,.12);padding:1.5rem}
+.req-icon{font-size:1.5rem;margin-bottom:.8rem;display:block}
+.req-title{font-family:'Josefin Sans',sans-serif;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem}
+.req-text{font-size:.9rem;color:rgba(245,245,245,.65);line-height:1.6}
+
+/* CTA FINAL */
+.cta-section{background:linear-gradient(135deg,var(--lapland),var(--lapland2));border-top:1px solid rgba(212,175,55,.15);padding:5rem 3rem;text-align:center}
+.cta-title{font-family:'MonteCarlo',cursive;font-size:clamp(2.5rem,6vw,4.5rem);color:var(--gold);text-shadow:0 0 40px rgba(212,175,55,.3);margin-bottom:1rem}
+.cta-sub{font-size:1.1rem;color:rgba(245,245,245,.6);font-style:italic;margin-bottom:2.5rem;max-width:500px;margin-left:auto;margin-right:auto}
+.cta-buttons{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.cta-primary{font-family:'Josefin Sans',sans-serif;font-size:.75rem;letter-spacing:.25em;text-transform:uppercase;padding:1.1rem 2.8rem;background:var(--gold);color:var(--black);text-decoration:none;transition:all .3s;display:inline-block}
+.cta-primary:hover{background:var(--gold-lt);transform:translateY(-3px);box-shadow:0 10px 30px rgba(212,175,55,.3)}
+.cta-ghost{font-family:'Josefin Sans',sans-serif;font-size:.75rem;letter-spacing:.25em;text-transform:uppercase;padding:1.1rem 2.8rem;border:1px solid rgba(212,175,55,.4);color:var(--gold);text-decoration:none;transition:all .3s;display:inline-block}
+.cta-ghost:hover{background:rgba(212,175,55,.08);border-color:var(--gold)}
+
+/* DIVIDER */
+.gold-divider{border:none;border-top:1px solid rgba(212,175,55,.12);margin:0}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .8s,transform .8s}
+.reveal.v{opacity:1;transform:none}
+
+@media(max-width:768px){
+  nav{padding:.9rem 1.5rem}
+  .trip-hero{min-height:70vh}
+  .hero-content{padding:0 1.5rem}
+  .price-bar{padding:1.5rem}
+  .section{padding:3rem 1.5rem}
+  .includes-grid,.campaign-grid{grid-template-columns:1fr}
+  .day-item{grid-template-columns:60px 1fr}
+  .day-item::before{left:29px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="index.html">WildHermes</a>
+  <a class="nav-back" href="matkat.html">← Kaikki matkat</a>
+  <a href="#varaa" class="nav-book">Varaa paikka</a>
+</nav>
+
+<!-- HERO -->
+<section class="trip-hero">
+  <div class="hero-bg"></div>
+  <div class="hero-stars" id="stars"></div>
+  <div id="snow"></div>
+  <svg class="hero-mountains" viewBox="0 0 1440 500" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="mG" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#1a3a5c" stop-opacity="0.6"/>
+        <stop offset="100%" stop-color="#050505" stop-opacity="1"/>
+      </linearGradient>
+      <!-- Snow cap gradient -->
+      <linearGradient id="sG" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#e8f0f8" stop-opacity="0.9"/>
+        <stop offset="100%" stop-color="#1a3a5c" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <!-- Far mountains -->
+    <path d="M0 500 L0 320 L120 220 L240 300 L360 180 L480 270 L560 190 L640 260 L720 140 L800 230 L900 160 L1000 240 L1100 170 L1200 250 L1320 180 L1440 230 L1440 500Z" fill="url(#mG)" opacity="0.5"/>
+    <!-- Snow caps far -->
+    <path d="M360 180 L340 210 L380 210Z" fill="url(#sG)" opacity="0.6"/>
+    <path d="M720 140 L700 180 L740 180Z" fill="url(#sG)" opacity="0.7"/>
+    <path d="M900 160 L878 195 L922 195Z" fill="url(#sG)" opacity="0.6"/>
+    <!-- Near mountains -->
+    <path d="M0 500 L0 380 L100 320 L200 370 L300 280 L400 350 L500 270 L600 340 L700 250 L800 330 L920 260 L1040 340 L1160 270 L1300 340 L1440 290 L1440 500Z" fill="#0a1520" opacity="0.9"/>
+    <!-- Snow near -->
+    <path d="M300 280 L275 315 L325 315Z" fill="white" opacity="0.5"/>
+    <path d="M700 250 L672 290 L728 290Z" fill="white" opacity="0.6"/>
+    <path d="M1160 270 L1135 308 L1185 308Z" fill="white" opacity="0.5"/>
+    <!-- Ground -->
+    <path d="M0 500 L0 450 L360 430 L720 440 L1080 428 L1440 435 L1440 500Z" fill="#050d18" opacity="0.98"/>
+    <!-- Trees -->
+    <g fill="#060e18" opacity="0.95">
+      <rect x="40" y="430" width="5" height="70"/><polygon points="43,395 28,435 58,435"/>
+      <rect x="80" y="440" width="4" height="60"/><polygon points="82,408 68,445 96,445"/>
+      <rect x="1360" y="430" width="5" height="70"/><polygon points="1363,393 1347,435 1379,435"/>
+      <rect x="1400" y="440" width="4" height="60"/><polygon points="1402,406 1388,445 1416,445"/>
+      <rect x="1420" y="435" width="4" height="65"/><polygon points="1422,400 1408,440 1436,440"/>
+    </g>
+  </svg>
+
+  <div class="hero-content">
+    <span class="hero-eyebrow">🇫🇮 Suomi · Huhtikuu 2026 · Hiihtovaellus</span>
+    <h1 class="hero-title">Tunturien <em>Valloitus</em></h1>
+    <p class="hero-subtitle">Pallas–Hetta · 5 vuorokautta</p>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">~58 km</div><div class="stat-label">Kokonaisreitti</div></div>
+      <div class="stat"><div class="stat-num">4</div><div class="stat-label">Tunturihuippua</div></div>
+      <div class="stat"><div class="stat-num">2</div><div class="stat-label">Erämaasaunaa</div></div>
+      <div class="stat"><div class="stat-num">490€</div><div class="stat-label">per henkilö</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICE BAR -->
+<div class="price-bar" id="varaa">
+  <div class="price-options">
+    <div class="price-opt">
+      <div class="price-opt-label">🐦 Varhainen lintu (–1.1)</div>
+      <div class="price-opt-val">390€</div>
+      <div class="price-opt-note">1.12–31.1</div>
+    </div>
+    <div class="price-opt featured">
+      <div class="price-opt-label">⭐ Normaali hinta</div>
+      <div class="price-opt-val">490€</div>
+      <div class="price-opt-note">1.2–28.2</div>
+    </div>
+    <div class="price-opt">
+      <div class="price-opt-label">⏰ Myöhäinen</div>
+      <div class="price-opt-val">590€</div>
+      <div class="price-opt-note">1.3 →</div>
+    </div>
+  </div>
+  <a href="index.html#contact" class="book-now-btn">Varaa paikka nyt →</a>
+</div>
+
+<!-- INTRO -->
+<div class="section reveal">
+  <span class="section-eyebrow">Mikä tämä on</span>
+  <h2 class="section-title">Hiljaisuus, hanki ja <em>huiput</em></h2>
+  <p style="font-size:1.05rem;color:rgba(245,245,245,.7);line-height:1.85;max-width:700px">
+    Tule valloittamaan Pallaksen tunturit hankikannolla. Yövymme teltassa tähtitaivaan alla, nousemme Lapin korkeimmille huipuille ja saunomme erämaassa. Vain tuntureiden korkeudessa – pois perusreitiltä – kuitenkin joka yö autiotuvan lähellä. Turvallinen, aito ja unohtumaton.
+  </p>
+  <br>
+  <p style="font-size:1.05rem;color:rgba(245,245,245,.7);line-height:1.85;max-width:700px">
+    Oppaan turvavarusteiden ansiosta pääset helposti näköyhteydelle reitille ja viereisille huipuille – kokemusta ei vaadita, mutta peruskunto on tarpeen.
+  </p>
+</div>
+
+<hr class="gold-divider">
+
+<!-- PÄIVÄOHJELMA -->
+<div class="section">
+  <span class="section-eyebrow">Päiväohjelma</span>
+  <h2 class="section-title reveal">Viisi päivää <em>Lapin huipuilla</em></h2>
+
+  <div class="day-timeline">
+
+    <div class="day-item reveal">
+      <div class="day-num-wrap">
+        <div class="day-dot"></div>
+        <div class="day-num">Päivä 0</div>
+      </div>
+      <div class="day-content">
+        <div class="day-header">
+          <h3 class="day-title">Saapuminen & Tutustuminen</h3>
+          <span class="day-badge">Perjantai</span>
+        </div>
+        <div class="day-meta">
+          <span class="day-meta-item"><strong>Kokoontuminen:</strong> Ovvnesjohka/Ketomella</span>
+          <span class="day-meta-item"><strong>Matka:</strong> ~6–10 km</span>
+          <span class="day-meta-item"><strong>Yö:</strong> Tappuri – teltta</span>
+        </div>
+        <p class="day-desc">Kokoontuminen parkkipaikalla, varusteiden tarkistus ja ryhmäbriefing. Mahdollisuus kyydittyä Kolarin juna-asemalta (lisämaksu). Lyhyt siirtymä Tappurin nurkille, telttaleirin pystytys ja tutustuminen ryhmän kesken – ruoanlaitto yhdessä, mahdollisesti sisällä.</p>
+        <div class="day-highlights">
+          <span class="highlight">Varusteiden tarkistus</span>
+          <span class="highlight">Ryhmäbriefing</span>
+          <span class="highlight">Ensimmäinen yhteinen illallinen</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-item reveal">
+      <div class="day-num-wrap">
+        <div class="day-dot special"></div>
+        <div class="day-num">Päivä 1</div>
+      </div>
+      <div class="day-content">
+        <div class="day-header">
+          <h3 class="day-title">Ounastunturi – Ensimmäinen Huippu!</h3>
+          <span class="day-badge huippu">Huippu 711m</span>
+          <span class="day-badge">Lauantai</span>
+        </div>
+        <div class="day-meta">
+          <span class="day-meta-item"><strong>Matka:</strong> ~12 km</span>
+          <span class="day-meta-item"><strong>Nousu:</strong> Pyhäkero 711 m</span>
+          <span class="day-meta-item"><strong>Yö:</strong> Sioskuru – autiotupa/teltta</span>
+        </div>
+        <p class="day-desc">Aamuhiihto hankikannolla ja tavaroiden vieminen Sioskurun autiotuvalle (riistakamera!). Pyhäkeron huiputus – ensimmäiset panoraamanäkymät tunturilta. Lounas huipulla, lasku Sioskuruun. Illalla tutustuminen lähimaastoon tai ryhmässä päätetään lisäohjelma. Nuotio ja tähtitaivas.</p>
+        <div class="day-highlights">
+          <span class="highlight">Pyhäkero 711m – ensimmäinen huippu</span>
+          <span class="highlight">Riistakamera Sioskurussa</span>
+          <span class="highlight">Nuotio & tähtitaivas</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-item reveal">
+      <div class="day-num-wrap">
+        <div class="day-dot special"></div>
+        <div class="day-num">Päivä 2</div>
+      </div>
+      <div class="day-content">
+        <div class="day-header">
+          <h3 class="day-title">Pitkä Lasku & Sauna – Palkintopäivä</h3>
+          <span class="day-badge sauna">🧖 SAUNA</span>
+          <span class="day-badge">Sunnuntai</span>
+        </div>
+        <div class="day-meta">
+          <span class="day-meta-item"><strong>Reitti:</strong> Sioskuru → Hannukuru</span>
+          <span class="day-meta-item"><strong>Matka:</strong> ~14 km</span>
+          <span class="day-meta-item"><strong>Yö:</strong> Hannukuru – teltta tai varaustupa</span>
+        </div>
+        <p class="day-desc">Aamulla länsi-tunturin huiputus ja 1,5 km pitkä lasku – yksi retken parhaista hetkistä! Rento maisemahiihto Hannukuruun hiihtoreittiä pitkin. Huom: Hannukurussa ei toimi netti – täydellinen irtiotto arjesta. Illalla ansaittu sauna ja palautuminen.</p>
+        <div class="day-highlights">
+          <span class="highlight">1,5 km pitkä lasku – retken parhaimpia!</span>
+          <span class="highlight">Maisemahiihto tuntureiden huipulla</span>
+          <span class="highlight">Erämaa­sauna illalla</span>
+          <span class="highlight">Ei nettiä – täydellinen irtiotto</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-item reveal">
+      <div class="day-num-wrap">
+        <div class="day-dot special"></div>
+        <div class="day-num">Päivä 3</div>
+      </div>
+      <div class="day-content">
+        <div class="day-header">
+          <h3 class="day-title">Outakka – Retken Kohokohta</h3>
+          <span class="day-badge huippu">Korkein huippu 719m</span>
+          <span class="day-badge sauna">🧖 SAUNA</span>
+          <span class="day-badge">Maanantai</span>
+        </div>
+        <div class="day-meta">
+          <span class="day-meta-item"><strong>Huippu:</strong> Outakka 719 m</span>
+          <span class="day-meta-item"><strong>Matka:</strong> ~10 km</span>
+          <span class="day-meta-item"><strong>Yö:</strong> Pahakuru – teltta</span>
+        </div>
+        <p class="day-desc">Nousu retken korkeimmalle huipulle Outakalle – 360° näkymät joka suuntaan. Tämä on se hetki jonka muistat loppuelämäsi. Pahakurussa on sauna ja netti toimii taas. Toinen saunapäivä – hyvin ansaittu!</p>
+        <div class="day-highlights">
+          <span class="highlight">Outakka 719m – korkein huippu</span>
+          <span class="highlight">360° panoraamanäkymät</span>
+          <span class="highlight">Toinen erämaa­sauna</span>
+          <span class="highlight">Netti toimii taas Pahakurussa</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-item reveal">
+      <div class="day-num-wrap">
+        <div class="day-dot"></div>
+        <div class="day-num">Päivä 4</div>
+      </div>
+      <div class="day-content">
+        <div class="day-header">
+          <h3 class="day-title">Kanjoni & Viimeinen Huippu</h3>
+          <span class="day-badge">Seikkailupäivä</span>
+          <span class="day-badge">Tiistai</span>
+        </div>
+        <div class="day-meta">
+          <span class="day-meta-item"><strong>Reitti:</strong> Pahakuru → Tappuri</span>
+          <span class="day-meta-item"><strong>Matka:</strong> ~11 km</span>
+          <span class="day-meta-item"><strong>Yö:</strong> Tappuri – viimeinen leiri</span>
+        </div>
+        <p class="day-desc">Upea kanjonijakso – dramaattiset maisemat joita harvat näkevät. Vielä yksi huippu ennen paluuta. Viimeinen yhteinen ilta nuotiolla – muistojen kertaus ja hyvä mieli.</p>
+        <div class="day-highlights">
+          <span class="highlight">Kanjonimaisemat – dramaattiset ja harvinaiset</span>
+          <span class="highlight">Neljäs huippu</span>
+          <span class="highlight">Viimeinen nuotioilta yhdessä</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-item reveal">
+      <div class="day-num-wrap">
+        <div class="day-dot"></div>
+        <div class="day-num">Päivä 5</div>
+      </div>
+      <div class="day-content">
+        <div class="day-header">
+          <h3 class="day-title">Paluu Kotiin</h3>
+          <span class="day-badge">Keskiviikko</span>
+        </div>
+        <div class="day-meta">
+          <span class="day-meta-item"><strong>Reitti:</strong> Tappuri → Ovvnesjohka/Ketomella</span>
+          <span class="day-meta-item"><strong>Matka:</strong> ~6 km</span>
+          <span class="day-meta-item"><strong>Perillä:</strong> Puoleen päivään mennessä</span>
+        </div>
+        <p class="day-desc">Rauhallinen aamulähtö ja paluu autoille. Hyvästelyt – ja jo suunnitellaan seuraavaa seikkailua. Kotimatka alkaa.</p>
+        <div class="day-highlights">
+          <span class="highlight">Aamulähtö</span>
+          <span class="highlight">Perillä autoilla puoleen päivään</span>
+          <span class="highlight">Kyyti Kolarin asemalle järjestettävissä</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<hr class="gold-divider">
+
+<!-- REITTIYHTEENVETO -->
+<div class="section reveal">
+  <span class="section-eyebrow">Reitin yhteenveto</span>
+  <h2 class="section-title">Koko reitti <em>yhdellä silmäyksellä</em></h2>
+  <table class="route-table">
+    <thead>
+      <tr><th>Päivä</th><th>Kohde</th><th>km</th><th>Yöpyminen</th><th>Sauna</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>0 – Pe</td><td>Saapuminen Ketomella</td><td>~6–10</td><td>Tappuri – teltta</td><td>–</td></tr>
+      <tr><td>1 – La</td><td>Pyhäkero 711m</td><td>~12</td><td>Sioskuru – autiotupa/teltta</td><td>–</td></tr>
+      <tr><td>2 – Su</td><td>Pitkä lasku + maisemahiihto</td><td>~14</td><td>Hannukuru – teltta/varaustupa</td><td class="sauna-cell">✓</td></tr>
+      <tr><td>3 – Ma</td><td>Outakka 719m 🏆</td><td>~10</td><td>Pahakuru – teltta</td><td class="sauna-cell">✓</td></tr>
+      <tr><td>4 – Ti</td><td>Kanjoni + viimeinen huippu</td><td>~11</td><td>Tappuri – leiri</td><td>–</td></tr>
+      <tr><td>5 – Ke</td><td>Paluu Ketomella</td><td>~6</td><td>–</td><td>–</td></tr>
+      <tr class="total-row"><td colspan="2">Yhteensä</td><td>~58 km</td><td>5 yötä</td><td class="sauna-cell">2 ×</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<hr class="gold-divider">
+
+<!-- LÄHTÖAJAT -->
+<div class="section" id="lahdot">
+  <span class="section-eyebrow">Lähtöajat kevät 2026</span>
+  <h2 class="section-title reveal">Valitse <em>sopiva ajankohta</em></h2>
+  <div class="dates-grid">
+    <div class="date-card early reveal">
+      <div class="date-discount">Varhainen –20%</div>
+      <div class="date-label">Lähtö 1</div>
+      <div class="date-dates">Pe 20.3. → Ke 25.3.</div>
+      <div class="date-status open">✓ Varattavissa</div>
+      <div style="margin-top:.8rem;font-family:'Josefin Sans',sans-serif;font-size:.65rem;color:var(--gold)">390€ varhainen / 490€ normaali</div>
+    </div>
+    <div class="date-card reveal">
+      <div class="date-label">Lähtö 2</div>
+      <div class="date-dates">Pe 27.3. → Ke 1.4.</div>
+      <div class="date-status open">✓ Varattavissa</div>
+      <div style="margin-top:.8rem;font-family:'Josefin Sans',sans-serif;font-size:.65rem;color:rgba(212,175,55,.6)">490€ / myöhäinen 590€</div>
+    </div>
+    <div class="date-card reveal">
+      <div class="date-label">Lähtö 3</div>
+      <div class="date-dates">Pe 3.4. → Ke 8.4.</div>
+      <div class="date-status open">✓ Varattavissa</div>
+      <div style="margin-top:.8rem;font-family:'Josefin Sans',sans-serif;font-size:.65rem;color:rgba(212,175,55,.6)">590€ myöhäinen</div>
+    </div>
+    <div class="date-card reveal">
+      <div class="date-label">Lähtö 4</div>
+      <div class="date-dates">Pe 10.4. → Ke 15.4.</div>
+      <div class="date-status open">✓ Varattavissa</div>
+      <div style="margin-top:.8rem;font-family:'Josefin Sans',sans-serif;font-size:.65rem;color:rgba(212,175,55,.6)">590€ myöhäinen</div>
+    </div>
+  </div>
+</div>
+
+<hr class="gold-divider">
+
+<!-- HINNOITTELU -->
+<div class="section reveal">
+  <span class="section-eyebrow">Hinnoittelu</span>
+  <h2 class="section-title">Mitä maksat – <em>ja milloin</em></h2>
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="pricing-name">🐦 Varhainen lintu</div>
+      <div class="pricing-price">390€</div>
+      <div class="pricing-note">Säästät 100€</div>
+      <div class="pricing-when">Varaus 1.12–31.1</div>
+    </div>
+    <div class="pricing-card main">
+      <div class="pricing-name">⭐ Normaali hinta</div>
+      <div class="pricing-price">490€</div>
+      <div class="pricing-note">per henkilö</div>
+      <div class="pricing-when">Varaus 1.2–28.2</div>
+    </div>
+    <div class="pricing-card">
+      <div class="pricing-name">⏰ Myöhäinen</div>
+      <div class="pricing-price">590€</div>
+      <div class="pricing-note">Paikat vähenevät</div>
+      <div class="pricing-when">Varaus 1.3 →</div>
+    </div>
+  </div>
+</div>
+
+<!-- KAMPANJAT -->
+<div class="section reveal" style="padding-top:0">
+  <span class="section-eyebrow">Ryhmäedut</span>
+  <h2 class="section-title">Tuo kaverit – <em>säästä enemmän</em></h2>
+  <div class="campaign-grid">
+    <div class="campaign-card">
+      <span class="campaign-icon">👥</span>
+      <div class="campaign-title">Tuo 3 kaveria</div>
+      <p class="campaign-desc">Tule neljän ryhmässä ja maksa vain neljästä – kaikki saavat alennuksen.</p>
+      <div class="campaign-discount">–20%</div>
+    </div>
+    <div class="campaign-card">
+      <span class="campaign-icon">🎯</span>
+      <div class="campaign-title">Kuuden porukka</div>
+      <p class="campaign-desc">6 hengen ryhmä saa automaattisesti ryhmäalennuksen per henkilö.</p>
+      <div class="campaign-discount">–15% / hlö</div>
+    </div>
+  </div>
+</div>
+
+<hr class="gold-divider">
+
+<!-- SISÄLTYY / EI SISÄLLY -->
+<div class="section reveal">
+  <span class="section-eyebrow">Paketin sisältö</span>
+  <h2 class="section-title">Mitä hintaan <em>sisältyy</em></h2>
+  <div class="includes-grid">
+    <div>
+      <p class="include-title">Sisältyy hintaan (490€)</p>
+      <ul class="include-list">
+        <li>Ammattiopastus koko retken ajan</li>
+        <li>Reittisuunnittelu ja kartat</li>
+        <li>Turvallisuusvarusteet (ensiapulaukku)</li>
+        <li>Satelliittipuhelin hätätilanteisiin</li>
+        <li>Pienryhmä – max 8 henkilöä</li>
+        <li>Kirjalliset ohjeet ennen retkeä</li>
+      </ul>
+    </div>
+    <div>
+      <p class="exclude-title">Ei sisälly hintaan</p>
+      <ul class="exclude-list">
+        <li>Ruoat (tuot itse tai yhteistilaus)</li>
+        <li>Henkilökohtaiset varusteet</li>
+        <li>Kuljetukset (Kolari-kyyti lisämaksu)</li>
+        <li>Saunamaksut (2 kertaa, ~20€/kerta)</li>
+        <li>Majoitus ennen/jälkeen retken</li>
+        <li>Varaustuvat Sioskurussa/Hannukurussa</li>
+        <li>Henkilökohtaiset vakuutukset</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<hr class="gold-divider">
+
+<!-- TURVALLISUUSSUUNNITELMA -->
+<div class="section reveal">
+  <span class="section-eyebrow">Turvallisuus</span>
+  <h2 class="section-title">Turvallisuus on <em>prioriteetti numero yksi</em></h2>
+  <div class="safety-box">
+    <div class="safety-title">🛡️ Turvallisuussuunnitelma – Pallas-Hetta Hiihtovaellus 2026</div>
+    <div class="safety-grid">
+      <div class="safety-item">
+        <span class="safety-icon">📡</span>
+        <div class="safety-text">
+          <strong>Viestintä</strong>
+          Satelliittipuhelin mukana koko retken ajan. Yhteystiedot: Pelastuslaitos 112, paikallinen tunturipalvelu. Päivittäinen check-in suunnitelman mukaan.
+        </div>
+      </div>
+      <div class="safety-item">
+        <span class="safety-icon">🏥</span>
+        <div class="safety-text">
+          <strong>Ensiapuvalmius</strong>
+          Oppaalla EA2-tason ensiapukoulutus. Kattava ensiapulaukku mukana. Evakuointisuunnitelma jokaiselle päiväosuudelle erikseen.
+        </div>
+      </div>
+      <div class="safety-item">
+        <span class="safety-icon">🌨️</span>
+        <div class="safety-text">
+          <strong>Sääseuranta</strong>
+          Reitti suunnitellaan kausiluonteisesti huhtikuun olosuhteisiin. Päivittäinen sääseuranta. Vaihtoehtoinen reitti varattu huonon sään varalle.
+        </div>
+      </div>
+      <div class="safety-item">
+        <span class="safety-icon">👥</span>
+        <div class="safety-text">
+          <strong>Pienryhmä</strong>
+          Max 8 henkilöä takaa että opas voi seurata jokaisen kuntoa. Hitain asettaa tahdin – ketään ei jätetä jälkeen.
+        </div>
+      </div>
+      <div class="safety-item">
+        <span class="safety-icon">🏠</span>
+        <div class="safety-text">
+          <strong>Autiotupaverkosto</strong>
+          Joka yö autiotuvan välittömässä läheisyydessä. Hätätilanteessa sisämajoitus aina saatavilla. Ei yövytä kaukana turvapaikasta.
+        </div>
+      </div>
+      <div class="safety-item">
+        <span class="safety-icon">📋</span>
+        <div class="safety-text">
+          <strong>Kirjalliset ohjeet</strong>
+          Kaikki osallistujat saavat kirjalliset turvallisuusohjeet ennen retkeä. Hätätilanneprosessi selitetään ensimmäisenä päivänä.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="gold-divider">
+
+<!-- VAATIMUKSET -->
+<div class="section reveal">
+  <span class="section-eyebrow">Kuka voi tulla</span>
+  <h2 class="section-title">Vaatimukset <em>osallistujille</em></h2>
+  <div class="req-grid">
+    <div class="req-card">
+      <span class="req-icon">💪</span>
+      <div class="req-title">Kunto</div>
+      <p class="req-text">Hyvä peruskunto. Jaksat hiihtää 10–15 km/päivä ahkion kanssa. Ei vaadi huippu­kuntoa.</p>
+    </div>
+    <div class="req-card">
+      <span class="req-icon">⛷️</span>
+      <div class="req-title">Kokemus</div>
+      <p class="req-text">Hiihto- ja telttailukokemus suositeltavaa muttei välttämätöntä. Opas opastaa kaiken.</p>
+    </div>
+    <div class="req-card">
+      <span class="req-icon">🎿</span>
+      <div class="req-title">Varusteet</div>
+      <p class="req-text">Tunturisukset suositeltavat (leveämmät, karvapohjat). Luistelusuksilla onnistuu, mutta nousu on vaativampaa. Varustelista lähetetään ilmoittautumisen jälkeen.</p>
+    </div>
+    <div class="req-card">
+      <span class="req-icon">🧠</span>
+      <div class="req-title">Asenne</div>
+      <p class="req-text">Seikkailumieli, yhteishenki ja halu nähdä vähän enemmän. Kaikki muu järjestyy.</p>
+    </div>
+  </div>
+  <p style="margin-top:1.5rem;font-size:.9rem;color:rgba(212,175,55,.7);font-style:italic">
+    Ryhmäkoko: min 4 – max 8 henkilöä. Pienryhmä takaa turvallisuuden ja henkilökohtaisen opastuksen.
+  </p>
+</div>
+
+<!-- CTA FINAL -->
+<div class="cta-section">
+  <p class="cta-title">Varaa paikkasi</p>
+  <p class="cta-sub">4 lähtöä kevät 2026 · Max 8 henkilöä per lähtö · Paikat täyttyvät nopeasti</p>
+  <div class="cta-buttons">
+    <a href="index.html#contact" class="cta-primary">Varaa paikka nyt →</a>
+    <a href="matkat.html" class="cta-ghost">← Kaikki matkat</a>
+  </div>
+  <p style="margin-top:2rem;font-family:'Josefin Sans',sans-serif;font-size:.65rem;letter-spacing:.2em;color:rgba(245,245,245,.25);text-transform:uppercase">WildHermes OÜ · info@wildhermes.com · @wildhermes</p>
+</div>
+
+<script>
+// Stars
+const starsEl = document.getElementById('stars');
+for (let i = 0; i < 120; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*70}%;width:${Math.random()<0.3?1.5:0.8}px;height:${Math.random()<0.3?1.5:0.8}px;--d:${2+Math.random()*4}s;animation-delay:${-Math.random()*5}s`;
+  starsEl.appendChild(s);
+}
+// Snow
+const snowEl = document.getElementById('snow');
+const flakes = ['❄','❅','·','*'];
+for (let i = 0; i < 35; i++) {
+  const f = document.createElement('div');
+  f.className = 'snowflake';
+  f.textContent = flakes[i%flakes.length];
+  f.style.cssText = `left:${Math.random()*100}%;--s:${.4+Math.random()*.8}rem;--f:${8+Math.random()*14}s;--dl:${-Math.random()*15}s`;
+  snowEl.appendChild(f);
+}
+// Reveal
+const obs = new IntersectionObserver(entries => {
+  entries.forEach((e,i) => {
+    if (e.isIntersecting) { setTimeout(() => e.target.classList.add('v'), i*60); obs.unobserve(e.target); }
+  });
+}, {threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
